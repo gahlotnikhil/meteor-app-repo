@@ -1,0 +1,23 @@
+<head>
+  <title>test-app</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/">
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.0.0/annyang.min.js"></script>
+</head>
+
+<body style="padding-top: 20px;">
+	<div>		
+		<div ng-include="'client/views/index.ng.html'"></div>
+	</div>
+
+  <!--<div>
+	  <h1>Welcome to Meteor!</h1>
+
+	  {{> hello}}
+   </div>-->
+</body>
+
+<template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+</template>

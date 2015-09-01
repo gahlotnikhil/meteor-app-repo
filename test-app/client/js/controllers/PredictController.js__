@@ -1,0 +1,187 @@
+angular.module('test-app').controller('PredictCtrl', ['$scope', '$q', function ($scope, $q) {
+
+	$scope.init = function() {
+		initAxes();
+
+		fetchData().then(function(result) {
+			$scope.data = result;
+			drawChart($scope.svg, result, $scope.xAxis, $scope.yAxis, $scope.height);
+
+			$scope.$watch('predictParam', function(value, oldValue) {
+		   		if (oldValue != undefined && oldValue != value) {
+		   			$scope.data[3].close = $scope.data[3].close + (value - oldValue)
+		   			$scope.data[1].close = $scope.data[1].close + (value - oldValue)
+
+		   			d3.selectAll("#areaChart").selectAll("path").data([]).exit().remove();
+
+		   			updateChart($scope.svg, $scope.data, $scope.xAxis, $scope.yAxis, $scope.height);
+		   		}
+		    });
+		})
+	};
+
+	function initAxes() {
+		var margin = {top: 20, right: 20, bottom: 30, left: 50};
+	    var width = 960 - margin.left - margin.right;
+	    var height = 500 - margin.top - margin.bottom;
+
+		var x = d3.time.scale()
+		    .range([0, width]);
+
+		var y = d3.scale.linear()
+		    .range([height, 0]);
+
+		$scope.xAxis = d3.svg.axis()
+		    .scale(x)
+		    .orient("bottom");
+
+		$scope.yAxis = d3.svg.axis()
+		    .scale(y)
+		    .orient("left");
+
+	    $scope.svg = d3.select("#areaChart").append("svg")
+				    .attr("width", width + margin.left + margin.right)
+				    .attr("height", height + margin.top + margin.bottom)
+				  	.append("g")
+			    	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+		$scope.height = height;
+	}
+
+	function fetchData () {
+
+		var data = [
+    	{
+    		date: '1-May-12',
+    		close: '58.13'
+    	},
+    	{
+    		date: '30-Apr-12',
+    		close: '583.98'
+    	},
+    	{
+    		date: '27-Apr-12',
+    		close: '603.00'
+    	},
+    	{
+    		date: '26-Apr-12',
+    		close: '60.70'
+    	} 
+    	];
+
+		var parseDate = d3.time.format("%d-%b-%y").parse;
+
+    	data.forEach(function(d) {
+		    d.date = parseDate(d.date);
+		    d.close = +d.close;
+		});
+
+    	var deferred = $q.defer();
+
+    	deferred.resolve(data);
+
+    	return deferred.promise;
+	}
+
+    var drawChart = function(svg, data, xAxis, yAxis, height) {
+
+    	var x = xAxis.scale();
+    	var y = yAxis.scale();
+
+    	
+	    var line = d3.svg.line()
+	    .x(function(d) { return x(d.date); })
+	    .y(function(d) { return y(d.close); });
+
+    	x.domain(d3.extent(data, function(d) { return d.date; }));
+	    y.domain(d3.extent(data, function(d) { return d.close; }));
+
+	    // var path = svg.append("path").data([data]);
+	    // //path.exit().remove();
+
+	    //   path
+	      
+	    //   .attr("class", "area")
+	    //   //  .attr("x", function(d) { return x(d.date); })
+	    //   // // .attr("width", x.rangeBand())
+	    //   // .attr("y", function(d) { return y(d.close); })
+	    //   // .attr("height", function(d) { return height - y(d.frequency); });
+
+	    //    .attr("d", area);
+
+	    updateChart(svg, data, xAxis, yAxis, height);
+
+	    // svg.selectAll(".bar")
+	    //   .data(data)
+	    // .enter().append("rect")
+	    //   .attr("class", "bar")
+	    //   .attr("x", function(d) { return x(d.date); })
+	    //   // .attr("width", x.rangeBand())
+	    //   .attr("y", function(d) { return y(d.close); })
+	    //   .attr("height", function(d) { return height - y(d.frequency); });
+
+	    svg.append("g")
+	      .attr("class", "x axis")
+	      .attr("transform", "translate(0," + height + ")")
+	      .call(xAxis);
+
+	    svg.append("g")
+	      .attr("class", "y axis")
+	      .call(yAxis)
+	      .append("text")
+	      .attr("transform", "rotate(-90)")
+	      .attr("y", 6)
+	      .attr("dy", ".71em")
+	      .style("text-anchor", "end")
+	      .text("Price ($)");
+
+	      //$scope.area = area;
+
+	      //$scope.path = path;
+
+
+    }
+
+    function updateChart(svg, data, xAxis, yAxis, height) {
+
+    	var x = xAxis.scale();
+    	var y = yAxis.scale();
+
+    	var area = d3.svg.area()
+	    .x(function(d) { return x(d.date); })
+	    .y0(height)
+	    .y1(function(d) { return y(d.close); });
+
+
+    	// if ($scope.dataElem != undefined) {
+    	// 	$scope.dataElem.exit().remove();
+    	// }
+
+    	// $scope.dataElem = svg.selectAll("path")
+			  //  .data([data]) ;// set the new data
+
+			  //  $scope.dataElem.enter().append("path");
+
+			  //  $scope.dataElem.attr("class", "area")
+			  //  .attr("d", area);
+
+			  svg.append("path").data([data])
+			.attr("class", "area").attr("d", area);
+
+			  //$scope.path.exit().remove();
+
+		// if ($scope.dataElem != undefined) {
+		// 	$scope.dataElem.exit().remove();
+		// }
+		// $scope.dataElem = svg.append("path").data([data])
+		// 	.attr("class", "area").attr("d", $scope.area);
+
+		// var path = svg.append("path").data([data]);
+		// path.attr("class", "area").attr("d", area);
+    }
+
+    function refresh() {
+
+    }
+
+}]);

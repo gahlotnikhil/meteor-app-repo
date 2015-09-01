@@ -1,0 +1,17 @@
+<div class="container" ng-controller="TestViewCtrl" ng-init="init()">
+	<div id='cssmenu'>
+		<ul>
+		   <li ng-class="isState('dashboard')? 'active':''"><a ng-click="clickTab('dashboard')">Dashboard</a></li>
+		   <li ng-class="isState('search')? 'active':''"><a ng-click="clickTab('search')">Search</a></li>
+		   <li ng-class="isState('predict')? 'active':''"><a ng-click="clickTab('predict')">Predict</a></li>
+		   <li ng-class="isState('about')? 'active':''"><a ng-click="clickTab('about')">About us</a></li>
+		</ul>
+	</div>
+
+
+	<div>
+		{{textStr}}
+	</div>
+
+	<div ui-view class="container-fluid"></div>
+</div>

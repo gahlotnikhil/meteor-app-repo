@@ -1,0 +1,25 @@
+<div class="row-fluid" ng-init="init()">
+    <div class="span3">
+      <div class="sidebar-nav-fixed">
+      	<div class="form-inline">
+	      	<fieldset class="scheduler-border">
+			    <legend class="scheduler-border">Prediction parameters</legend>
+			    <div class="control-group">
+			        <label class="control-label input-label" for="startTime">Service 1</label>
+			        <div class="controls bootstrap-timepicker">
+			            <md-slider ng-model="predictParams.param1" min="5" max="500" aria-label="Slider" ng-change="change()" ng-model-options="{ debounce: 50 }">
+						</md-slider>
+			        </div>
+			    </div>
+			</fieldset>
+      	</div>
+      </div>
+    </div>
+    <div class="span9">
+      <div id="areaChart"></div>
+    </div>
+</div>
+
+<md-whiteframe class="md-whiteframe-z5" layout layout-align="center center" style="margin: 20px; position: relative; background-color: beige;">
+		<div>Say : "Future :[number in %]" to change the parameter and view the future based on that.</div>
+</md-whiteframe>
