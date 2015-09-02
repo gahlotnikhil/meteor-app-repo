@@ -2,11 +2,11 @@
 angular.module('test-app').directive('areaChart', function() {
 
 
-  var controller = ['$scope', '$q', '$attrs', '$parse', '$element', function ($scope, $q, $attrs, $parse, $element) {
+  var controller = ['$scope', '$q', '$attrs', '$parse', '$element', '$timeout', function ($scope, $q, $attrs, $parse, $element, $timeout) {
 
   	$scope.init = function() {
-		google.load("visualization", "1", {packages:["corechart"]});
-      	google.setOnLoadCallback(drawChart);
+      	//google.setOnLoadCallback(drawChart);
+        // google.load("visualization", "1", {packages:["corechart"]});
 
 		fetchData().then(function(result) {
 			$scope.data = result;
@@ -16,15 +16,43 @@ angular.module('test-app').directive('areaChart', function() {
 
 	function drawChart() {
         
+        // var options = {
+        //   title: 'Company Performance',
+        //   hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
+        //   vAxis: {minValue: 0}
+        // };
+
+        // options = angular.isDefined($scope.options) ? $scope.options : options;
+
+        // var data = google.visualization.arrayToDataTable($scope.data);
+
         var options = {
           title: 'Company Performance',
-          hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-          vAxis: {minValue: 0}
+          // width: 900,
+          // height: 500,
+          hAxis: {
+            format: 'M/d/yy',
+            gridlines: {count: 5}
+          },
+          vAxis: {
+            gridlines: {color: 'none'},
+            minValue: 0
+          }
         };
 
-        options = angular.isDefined($scope.options) ? $scope.options : options;
 
-        var data = google.visualization.arrayToDataTable($scope.data);
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Stock');
+
+        var arr = $scope.data;
+
+        arr.forEach(function(d) {
+          d[0] = moment(d[0]).toDate();
+        });
+
+        data.addRows(arr);
+
 
         chart = new google.visualization.AreaChart($element.find('#areaChart').get(0));
 
@@ -37,7 +65,10 @@ angular.module('test-app').directive('areaChart', function() {
     }
 
     function renderChart(data, options) {
-    	chart.draw(data, options);
+      $timeout(function() {
+        $scope.chart.draw(data, options);
+      });
+    	
     }
 
     function fetchData () {

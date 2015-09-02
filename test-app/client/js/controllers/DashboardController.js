@@ -1,4 +1,4 @@
-angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state', function ($scope, $q, $state) {
+angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state', 'TestDataService', function ($scope, $q, $state, TestDataService) {
   $scope.speechIdentified = false;
 
   $scope.init = function() {
@@ -45,6 +45,10 @@ angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state'
 		  showSpeechProgress(false);
 	  });
 	}
+
+	$scope.fetchData().then(function(data) {
+		$scope.data = data;
+	});
   }
 
   function showSpeechProgress(show) {
@@ -54,16 +58,13 @@ angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state'
   }
 
   $scope.fetchData = function() {
-    	var data = [
-          ['Date', 'Stock'],
-          ['1-May-12',  1000],
-          ['30-Apr-12',  1170],
-          ['27-Apr-12',  660],
-          ['26-Apr-12',  1030]];
 
     	var deferred = $q.defer();
 
-    	deferred.resolve(data);
+    	TestDataService.getCompanyData().then(function(data) {
+    		deferred.resolve(data.data);
+    	});
+    	//deferred.resolve(data);
 
     	return deferred.promise;
 	}
