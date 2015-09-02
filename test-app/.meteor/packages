@@ -18,3 +18,5 @@ momentjs:moment
 angularjs:angular-resource
 nimble:restivus
 netanelgilad:angular-server
+planettraining:material-design-icons
+angular:angular-messages

@@ -24,6 +24,16 @@ angular.module("test-app").config(['$urlRouterProvider', '$stateProvider', '$loc
         templateUrl: 'client/views/search.ng.html',
         controller: 'PredictCtrl'
       })
+      .state('infiniteScrollTable', {
+        url: '/infiniteScrollTable',
+        templateUrl: 'client/views/infiniteScrolling.ng.html',
+        controller: 'DemoController'
+      })
+      .state('form', {
+        url: '/form',
+        templateUrl: 'client/views/form.ng.html',
+        controller: 'formController'
+      })
       
       // .state('partyDetails', {
       //   url: '/parties/:partyId',
