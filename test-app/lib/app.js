@@ -3,7 +3,10 @@ if (Meteor.isClient) {
 		'angular-meteor', 
 		'ui.router',
   		'ngMaterial',
-  		'infinite-scroll']);
+  		'infinite-scroll',
+  		'ngAnimate', 
+  		'ngAria',
+  		'ngMessages']);
 
 	angular.module('test-app').config(['$mdIconProvider', function ($mdIconProvider) {
   $mdIconProvider

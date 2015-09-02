@@ -10,8 +10,10 @@ angular.module('test-app').controller('DemoController', function($scope) {
 
   $scope.loadMore = function() {
     var last = $scope.images[$scope.images.length - 1].id;
-    for(var i = 1; i <= 8; i++) {
-      $scope.images.push({'id':last + i,'name':'Johnson'});
+    if(last != 2000){
+    	for(var i = 1; i <= 8; i++) {
+      		$scope.images.push({'id':last + i,'name':'Johnson'});
+    	}	
     }
   };
 });
