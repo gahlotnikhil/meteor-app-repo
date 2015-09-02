@@ -1,6 +1,6 @@
-angular:angular@1.4.4
-angular:angular-animate@1.4.4
-angular:angular-aria@1.4.4
+angular:angular@1.4.5
+angular:angular-animate@1.4.5
+angular:angular-aria@1.4.5
 angular:angular-material@0.10.1
 angularui:angular-ui-router@0.2.15
 art1sec8:nlp-compromise@0.0.2
@@ -40,6 +40,7 @@ mobile-status-bar@1.0.3
 mongo@1.1.0
 observe-sequence@1.0.6
 ordered-dict@1.0.3
+planettraining:material-design-icons@2.0.0
 rafaelhdr:google-charts@0.0.2
 random@1.0.3
 reactive-dict@1.1.0
