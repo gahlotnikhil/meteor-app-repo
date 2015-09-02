@@ -167,3 +167,13 @@ md-input-container > md-radio-group {
 md-input-container > md-radio-group > md-radio-button { 
     margin: 8px 5px 0;
     display: inline-block; }
+
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: absolute;
+  top: 50%;
+}
