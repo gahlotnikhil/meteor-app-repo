@@ -1,12 +1,10 @@
 (function() {
-angular.module('test-app').directive('areaChart', function() {
+angular.module('test-app').directive('barChart', function() {
 
 
   var controller = ['$scope', '$q', '$attrs', '$parse', '$element', '$timeout', function ($scope, $q, $attrs, $parse, $element, $timeout) {
 
   	$scope.init = function() {
-      	//google.setOnLoadCallback(drawChart);
-        // google.load("visualization", "1", {packages:["corechart"]});
 
 		fetchData().then(function(result) {
 			$scope.data = result;
@@ -16,25 +14,13 @@ angular.module('test-app').directive('areaChart', function() {
 
 	function drawChart() {
         
-        // var options = {
-        //   title: 'Company Performance',
-        //   hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-        //   vAxis: {minValue: 0}
-        // };
-
-        // options = angular.isDefined($scope.options) ? $scope.options : options;
-
-        // var data = google.visualization.arrayToDataTable($scope.data);
-
         var options = {
           title: 'Company Performance',
-          // width: 900,
-          // height: 500,
-          hAxis: {
+          vAxis: {
             format: 'M/d/yy',
             gridlines: {count: 5}
           },
-          vAxis: {
+          hAxis: {
             gridlines: {color: 'none'},
             minValue: 0
           }
@@ -54,7 +40,7 @@ angular.module('test-app').directive('areaChart', function() {
         data.addRows(arr);
 
 
-        chart = new google.visualization.AreaChart($element.find('#areaChart').get(0));
+        chart = new google.visualization.BarChart($element.find('#barChart').get(0));
 
         exposeObject($attrs.refresh);
 
@@ -106,7 +92,7 @@ angular.module('test-app').directive('areaChart', function() {
     function exposeObject(attr) {
 		if (angular.isDefined(attr) && attr != '') {
 			var attrAssignable = $parse(attr).assign;
-			if (attrAssignableattrAssignable) {
+			if (attrAssignable) {
 				attrAssignable($scope.$parent, refresh);
 			} else {
 				trace.info('Could not expose object for: ' + attr + ', expression is not an assignable.');
@@ -124,7 +110,7 @@ angular.module('test-app').directive('areaChart', function() {
      //    oneWayBind: "&myOneWayBind"
         options: "=options"
     },
-    template: '<div id="areaChart" ng-init="init()"></div>',
+    template: '<div id="barChart" ng-init="init()"></div>',
     link: function (scope, element, attr) {
 
     },

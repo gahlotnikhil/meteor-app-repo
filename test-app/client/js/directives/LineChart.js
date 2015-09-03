@@ -30,8 +30,6 @@ angular.module('test-app').directive('lineChart', function() {
 
         var options = {
           title: 'Company Performance',
-          // width: 900,
-          // height: 500,
           hAxis: {
             format: 'M/d/yy',
             gridlines: {count: 5}
@@ -42,16 +40,6 @@ angular.module('test-app').directive('lineChart', function() {
           }
         };
         
-        // var options = {
-        //   title: 'Company Performance',
-        //   hAxis: {title: 'Year',  titleTextStyle: {color: '#333'}},
-        //   vAxis: {minValue: 0}
-        // };
-
-        // options = angular.isDefined($scope.options) ? $scope.options : options;
-
-        // var data = google.visualization.arrayToDataTable($scope.data);
-
         chart = new google.visualization.LineChart($element.find('div').get(0));
 
         exposeObject($attrs.refresh);
@@ -102,9 +90,9 @@ angular.module('test-app').directive('lineChart', function() {
 
     function exposeObject(attr) {
   		if (angular.isDefined(attr) && attr != '') {
-  			var dialogAttrAssignable = $parse(attr).assign;
-  			if (dialogAttrAssignable) {
-  				dialogAttrAssignable($scope.$parent, refresh);
+  			var attrAssignable = $parse(attr).assign;
+  			if (attrAssignable) {
+  				attrAssignable($scope.$parent, refresh);
   			} else {
   				trace.info('Could not expose object for: ' + attr + ', expression is not an assignable.');
   			}
