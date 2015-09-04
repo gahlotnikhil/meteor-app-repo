@@ -52,7 +52,14 @@ angular.module('test-app').controller('AppDataSecurityCtrl', ['$scope', '$q', '$
         };
 
     $scope.onSelect = function(selection) {
-      $scope.geoOptions.region = 111;
+
+      // Its a Hard coded dummy behavior...
+      if ($scope.geoOptions.region == undefined || $scope.geoOptions.region == 'world') {
+        $scope.geoOptions.region = '155';
+      } else {
+        $scope.geoOptions.region = 'world';
+      }
+      
 
       $scope.refreshGeo();
       

@@ -5,10 +5,10 @@ angular.module('test-app').service('SecurityDataService', function($http, $q) {
     
 	var data = {
 		data: [
-			['InvestOne', 5000],
-			['Investran', 4000],
-			['Infinity', 10000],
-			['ControlCenter', 200]
+			['Product1', 5000],
+			['Product2', 4000],
+			['Product3', 10000],
+			['Product4', 200]
 		]
    	};
 
