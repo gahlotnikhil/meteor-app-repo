@@ -22,10 +22,6 @@ angular.module('test-app').directive('lineChart', function() {
 
       var arr = $scope.data;
 
-      arr.forEach(function(d) {
-        d[0] = moment(d[0]).toDate();
-      });
-
       data.addRows(arr);
 
         var options = {

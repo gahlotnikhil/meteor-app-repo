@@ -57,7 +57,7 @@ angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state'
   	});
   }
 
-  $scope.fetchData = function() {
+  	$scope.fetchData = function() {
 
     	var deferred = $q.defer();
 
@@ -68,4 +68,40 @@ angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state'
 
     	return deferred.promise;
 	}
+
+	$scope.columns = [
+	{
+		type: 'date',
+		label: 'Date'
+	},
+	{
+		type: 'number',
+		label: 'Stock'
+	}];
+
+	$scope.options = {
+        title: 'Company Performance',
+        hAxis: {
+          // format: 'M/d/yy',
+          gridlines: {count: 15}
+        },
+        vAxis: {
+          gridlines: {color: 'none'},
+          minValue: 0
+        }
+      };
+
+    $scope.barChartOptions = {
+        title: 'Company Performance',
+	    vAxis: {
+	        format: 'M/d/yy',
+	        gridlines: {count: 5}
+	    },
+	    hAxis: {
+	        gridlines: {color: 'none'},
+	        minValue: 0
+	    }
+  	};
+
+      
 }]);

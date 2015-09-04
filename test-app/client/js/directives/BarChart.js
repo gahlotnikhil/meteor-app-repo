@@ -2,110 +2,136 @@
 angular.module('test-app').directive('barChart', function() {
 
 
-  var controller = ['$scope', '$q', '$attrs', '$parse', '$element', '$timeout', function ($scope, $q, $attrs, $parse, $element, $timeout) {
+    var controller = ['$scope', '$q', '$attrs', '$parse', '$element', '$timeout', function ($scope, $q, $attrs, $parse, $element, $timeout) {
 
-  	$scope.init = function() {
+      $scope.init = function() {
 
-		fetchData().then(function(result) {
-			$scope.data = result;
-			drawChart();
-		})
-	};
+      getColumns().then(function(result) {
+        $scope.columns = result;
 
-	function drawChart() {
+        var dataTable = new google.visualization.DataTable();
+
+        if (result != undefined) {
+          result.forEach(function(column) {
+            dataTable.addColumn(column);
+          });
+        }
+
+        $scope.dataTable = dataTable;
+
+        fetchData().then(function(result) {
+          $scope.data = result;
+          drawChart();
+        })
+      })
+    };
+
+    function drawChart() {
         
-        var options = {
-          title: 'Company Performance',
-          vAxis: {
-            format: 'M/d/yy',
-            gridlines: {count: 5}
-          },
-          hAxis: {
-            gridlines: {color: 'none'},
-            minValue: 0
-          }
-        };
+      $scope.dataTable.addRows($scope.data);
 
+      var chart = new google.visualization.BarChart($element.find('#barChart').get(0));
 
-        var data = new google.visualization.DataTable();
-        data.addColumn('date', 'Date');
-        data.addColumn('number', 'Stock');
+      addSelectionEvent(chart);
 
-        var arr = $scope.data;
+      exposeObject($attrs.refresh);
 
-        arr.forEach(function(d) {
-          d[0] = moment(d[0]).toDate();
+      renderChart($scope.dataTable, $scope.options);
+
+      $scope.chart = chart;
+
+    }
+
+    function addSelectionEvent(chart) {
+      google.visualization.events.addListener(chart, 'select', function(ss) {
+        var row = chart.getSelection()[0].row;
+        var selectedData = [];
+
+        $scope.columns.forEach(function(column, index) {
+          selectedData.push($scope.dataTable.getValue(row, index));
         });
 
-        data.addRows(arr);
+        var dataFn = $parse($attrs.onSelect);
+        var isFunction = $attrs.onSelect.indexOf('(') != -1;
 
+        if(isFunction) {
+          var targetScope = $scope.$parent;
+          var funcParams = {selection: selectedData};
+          dataFn(targetScope, funcParams);
 
-        chart = new google.visualization.BarChart($element.find('#barChart').get(0));
-
-        exposeObject($attrs.refresh);
-
-        renderChart(data, options);
-
-        $scope.chart = chart;
-        $scope.options = options;
+        }
+      });
     }
 
     function renderChart(data, options) {
       $timeout(function() {
         $scope.chart.draw(data, options);
       });
-    	
+      
     }
 
-    function fetchData () {
-    	var currentScope = $scope.$parent;
-    	var deferred = $q.defer();
+    function getColumns (attr) {
+      return fetchAttrValue($attrs.columns);
+    }
 
-    	var dataFn = $parse($attrs.data);
-		var isFunction = $attrs.data.indexOf('(') != -1;
+    function fetchData (attr) {
+      return fetchAttrValue($attrs.data);
+    }
 
-		if(isFunction) {
-			var object = dataFn(currentScope);
+    function fetchAttrValue (attr) {
+      var deferred = $q.defer();
 
-			// Function returning deferred promise
-			if (angular.isFunction(object.then)) {
-				object.then(function(data) {
-					deferred.resolve(data);
-				}, function(error) {
-					deferred.reject(error);
-				});
-			} else { // Function returning data
-				deferred.resolve(object);
-			}
-		} else { // Plain object
-			var object = dataFn(currentScope);
-			deferred.resolve(object);
-		}
+      if (attr != undefined) {
+        var currentScope = $scope.$parent;
 
-    	return deferred.promise;
+        var dataFn = $parse(attr);
+        var isFunction = attr.indexOf('(') != -1;
+
+        if(isFunction) {
+          var object = dataFn(currentScope);
+
+          // Function returning deferred promise
+          if (angular.isFunction(object.then)) {
+            object.then(function(data) {
+              deferred.resolve(data);
+            }, function(error) {
+              deferred.reject(error);
+            });
+          } else { // Function returning data
+            deferred.resolve(object);
+          }
+        } else { // Plain object
+          var object = dataFn(currentScope);
+          deferred.resolve(object);
+        }
+      } else {
+        deferred.resolve(undefined);
+      }
+
+      return deferred.promise;
     }
 
     function refresh() {
-    	renderChart($scope.data, $scope.options);
+      renderChart($scope.data, $scope.options);
     }
 
     function exposeObject(attr) {
-		if (angular.isDefined(attr) && attr != '') {
-			var attrAssignable = $parse(attr).assign;
-			if (attrAssignable) {
-				attrAssignable($scope.$parent, refresh);
-			} else {
-				trace.info('Could not expose object for: ' + attr + ', expression is not an assignable.');
-			}
-		}
-	}
+      if (angular.isDefined(attr) && attr != '') {
+        var attrAssignable = $parse(attr).assign;
+        if (attrAssignable) {
+          attrAssignable($scope.$parent, refresh);
+        } else {
+          trace.info('Could not expose object for: ' + attr + ', expression is not an assignable.');
+        }
+      }
+    }
           
   }];
 
   return {
     restrict: 'EA',
     scope: {
-    	// text: "@myText",
+      // text: "@myText",
      //    twoWayBind: "=myTwoWayBind",
      //    oneWayBind: "&myOneWayBind"
         options: "=options"

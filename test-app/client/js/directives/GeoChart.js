@@ -1,38 +1,54 @@
 (function() {
-angular.module('test-app').directive('columnChart', function() {
+angular.module('test-app').directive('geoChart', function() {
 
 
     var controller = ['$scope', '$q', '$attrs', '$parse', '$element', '$timeout', function ($scope, $q, $attrs, $parse, $element, $timeout) {
 
     	$scope.init = function() {
 
-      getColumns().then(function(result) {
-        $scope.columns = result;
+        //google.load("visualization", "1", {packages:["geochart"]});
 
-        var dataTable = new google.visualization.DataTable();
+        getColumns().then(function(result) {
+          $scope.columns = result;
 
-        if (result != undefined) {
-          result.forEach(function(column) {
-            dataTable.addColumn(column);
-          });
-        }
+          var dataTable = new google.visualization.DataTable();
 
-        $scope.dataTable = dataTable;
+          if (result != undefined) {
+            result.forEach(function(column) {
+              dataTable.addColumn(column);
+            });
+          }
 
-        fetchData().then(function(result) {
-          $scope.data = result;
-          drawChart();
+          $scope.dataTable = dataTable;
+
+          fetchData().then(function(result) {
+            $scope.data = result;
+            drawChart();
+          })
         })
-      })
-  	};
+    	};
 
   	function drawChart() {
         
       $scope.dataTable.addRows($scope.data);
 
-      var chart = new google.visualization.ColumnChart($element.find('#columnChart').get(0));
+      var map = 'GeoChart';
+
+      if ($scope.map == 'map') {
+        map = 'Map';
+      }
+
+      var chart = new google.visualization[map]($element.find('#geoChart').get(0));
 
       addSelectionEvent(chart);
+
+      // if (map != 'map') {
+
+      //   google.visualization.events.addListener(chart, 'regionClick', function(region) {
+      //     $scope.options.region = region;
+      //     refresh();
+      //   });
+      // }
 
       exposeObject($attrs.refresh);
 
@@ -43,7 +59,7 @@ angular.module('test-app').directive('columnChart', function() {
     }
 
     function addSelectionEvent(chart) {
-      google.visualization.events.addListener(chart, 'select', function(ss) {
+      google.visualization.events.addListener(chart, 'select', function() {
         var row = chart.getSelection()[0].row;
         var selectedData = [];
 
@@ -58,7 +74,6 @@ angular.module('test-app').directive('columnChart', function() {
           var targetScope = $scope.$parent;
           var funcParams = {selection: selectedData};
           dataFn(targetScope, funcParams);
-
         }
       });
     }
@@ -112,7 +127,7 @@ angular.module('test-app').directive('columnChart', function() {
     }
 
     function refresh() {
-    	renderChart($scope.data, $scope.options);
+    	renderChart($scope.dataTable, $scope.options);
     }
 
     function exposeObject(attr) {
@@ -134,9 +149,10 @@ angular.module('test-app').directive('columnChart', function() {
     	// text: "@myText",
      //    twoWayBind: "=myTwoWayBind",
      //    oneWayBind: "&myOneWayBind"
-        options: "=options"
+        options: "=options",
+        map: "@map"
     },
-    template: '<div id="columnChart" ng-init="init()"></div>',
+    template: '<div id="geoChart" ng-init="init()"></div>',
     link: function (scope, element, attr) {
 
     },

@@ -1,0 +1,26 @@
+
+<div ng-init="init()">
+
+	<div layout="row" layout-wrap layout-margin>
+	  <div flex="45" flex-order="2">
+	    <geo-chart data="fetchData()" columns="geoColumns" on-select="onSelect(selection)" options="geoOptions" refresh="refreshGeo"></geo-chart>
+	  </div>
+	  <div flex="45" flex-order="1">
+	    <!-- <bar-chart data="fetchData()" columns="colChartCols" options="options"></bar-chart> -->
+	    <geo-chart map="map" data="fetchData()" columns="geoColumns" on-select="onSelect(selection)" ></geo-chart>
+	  </div>
+	  <div flex="50" flex-order="3">
+	    
+	  </div>
+	  <div flex="50" flex-order="4">
+	    
+	  </div>
+	</div>
+
+	<!-- <md-whiteframe class="md-whiteframe-z5" layout layout-align="center center" style="margin: 20px; position: relative; background-color: beige;">
+		<div>Say : "Tapas, Future" or "Future" to predict the future pattern of this data.</div>
+	</md-whiteframe>
+
+	<div class="overlay" ng-if="speechProgress == true"></div> -->
+</div>
+
