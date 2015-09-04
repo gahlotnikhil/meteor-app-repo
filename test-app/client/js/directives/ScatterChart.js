@@ -9,7 +9,7 @@ Supported Properties:
 
 */
 (function() {
-angular.module('test-app').directive('columnChart', function() {
+angular.module('test-app').directive('scatterChart', function() {
 
 
     var controller = ['$scope', '$q', '$attrs', '$parse', '$element', '$timeout', function ($scope, $q, $attrs, $parse, $element, $timeout) {
@@ -40,7 +40,7 @@ angular.module('test-app').directive('columnChart', function() {
         
       $scope.dataTable.addRows($scope.data);
 
-      var chart = new google.visualization.ColumnChart($element.find('#columnChart').get(0));
+      var chart = new google.visualization.ScatterChart($element.find('#scatterChart').get(0));
 
       addSelectionEvent(chart);
 
@@ -151,7 +151,7 @@ angular.module('test-app').directive('columnChart', function() {
      //    oneWayBind: "&myOneWayBind"
         options: "=options"
     },
-    template: '<div id="columnChart" ng-init="init()"></div>',
+    template: '<div id="scatterChart" ng-init="init()"></div>',
     link: function (scope, element, attr) {
 
     },

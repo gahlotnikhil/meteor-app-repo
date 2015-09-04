@@ -1,3 +1,13 @@
+
+/*
+Supported Properties:
+  data: Function/Promise/Object
+  columns: Function/Promise/Object
+  options: Object
+  refresh: Exposed function -> Change data/options/columns and call refresh() to Refresh the graph.
+  on-select: Function(selection)
+
+*/
 (function() {
 angular.module('test-app').directive('geoChart', function() {
 
@@ -60,6 +70,11 @@ angular.module('test-app').directive('geoChart', function() {
 
     function addSelectionEvent(chart) {
       google.visualization.events.addListener(chart, 'select', function() {
+        if (chart.getSelection() == undefined || chart.getSelection().length ==0 
+          || chart.getSelection()[0].row == undefined) {
+          return;
+        }
+
         var row = chart.getSelection()[0].row;
         var selectedData = [];
 
@@ -97,13 +112,13 @@ angular.module('test-app').directive('geoChart', function() {
       var deferred = $q.defer();
 
       if (attr != undefined) {
-      	var currentScope = $scope.$parent;
+      	var targetScope = $scope.$parent;
 
       	var dataFn = $parse(attr);
   		  var isFunction = attr.indexOf('(') != -1;
 
     		if(isFunction) {
-    			var object = dataFn(currentScope);
+    			var object = dataFn(targetScope);
 
     			// Function returning deferred promise
     			if (angular.isFunction(object.then)) {
@@ -116,7 +131,7 @@ angular.module('test-app').directive('geoChart', function() {
     				deferred.resolve(object);
     			}
     		} else { // Plain object
-    			var object = dataFn(currentScope);
+    			var object = dataFn(targetScope);
     			deferred.resolve(object);
     		}
       } else {

@@ -59,5 +59,41 @@ angular.module('test-app').controller('AppDataSecurityCtrl', ['$scope', '$q', '$
     }
 
 
+    $scope.fetchTimelineData = function() {
+
+      var deferred = $q.defer();
+
+      SecurityDataService.getViolationsByTimeLine($stateParams.application).then(function(data) {
+        deferred.resolve(data.data);
+      });
+
+      return deferred.promise;
+    }
+
+    $scope.calColumns = [
+    {
+      type: 'date',
+      label: 'Date'
+    },
+    {
+      type: 'number',
+      label: 'Violations'
+    }];
+
+    $scope.calOptions = {
+         title: "Violations time line",
+         width: '100%',
+         height: 400,
+         chartArea: {
+            left: "25%",
+            top: "3%",
+            height: "80%",
+            width: "100%"
+         }
+       };
+
+    $scope.onCalSelect = function(selection) {
+      //TODO
+    }
 
 }]);

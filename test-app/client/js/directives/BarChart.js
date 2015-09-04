@@ -1,3 +1,13 @@
+
+/*
+Supported Properties:
+  data: Function/Promise/Object
+  columns: Function/Promise/Object
+  options: Object
+  refresh: Exposed function -> Change data/options/columns and call refresh() to Refresh the graph.
+  on-select: Function(selection)
+
+*/
 (function() {
 angular.module('test-app').directive('barChart', function() {
 
@@ -82,13 +92,13 @@ angular.module('test-app').directive('barChart', function() {
       var deferred = $q.defer();
 
       if (attr != undefined) {
-        var currentScope = $scope.$parent;
+        var targetScope = $scope.$parent;
 
         var dataFn = $parse(attr);
         var isFunction = attr.indexOf('(') != -1;
 
         if(isFunction) {
-          var object = dataFn(currentScope);
+          var object = dataFn(targetScope);
 
           // Function returning deferred promise
           if (angular.isFunction(object.then)) {
@@ -101,7 +111,7 @@ angular.module('test-app').directive('barChart', function() {
             deferred.resolve(object);
           }
         } else { // Plain object
-          var object = dataFn(currentScope);
+          var object = dataFn(targetScope);
           deferred.resolve(object);
         }
       } else {

@@ -2,17 +2,48 @@
 <div ng-init="init()">
 
 	<div layout="row" layout-wrap>
-	  <div flex="50" flex-order="2">
-	    <area-chart data="fetchData()"></area-chart>
-	  </div>
 	  <div flex="50" flex-order="1">
-	    <line-chart data="fetchData()"></line-chart>
+	  	<md-tabs md-dynamic-height md-border-bottom>
+		    <md-tab label="Area Graph">
+		        <md-content class="md-padding">
+		          <area-chart data="fetchData()"></area-chart>
+		        </md-content>
+		      </md-tab>
+		      <md-tab label="Line Graph">
+		        <md-content class="md-padding">
+		          <line-chart data="fetchData()"></line-chart>
+		        </md-content>
+		      </md-tab>
+	    </md-tabs>
+	  </div>
+	  <div flex="50" flex-order="2">
+	  	<md-tabs md-dynamic-height md-border-bottom>
+		    <md-tab label="Bar Graph">
+		        <md-content class="md-padding"><column-chart data="fetchData()" columns="columns" options="options"></column-chart>
+		        </md-content>
+		      </md-tab>
+		      <md-tab label="Vertical Bar Graph">
+		        <md-content class="md-padding">
+		          <bar-chart data="fetchData()" columns="columns" options="barChartOptions"></bar-chart>
+		        </md-content>
+		      </md-tab>
+	    </md-tabs>
 	  </div>
 	  <div flex="50" flex-order="3">
-	    <column-chart data="fetchData()" columns="columns" options="options"></column-chart>
+	    <md-tabs md-dynamic-height md-border-bottom>
+		    <md-tab label="Scatter Graph">
+		        <md-content class="md-padding"><scatter-chart data="fetchData()" columns="columns" options="options"></scatter-chart>
+		        </md-content>
+		      </md-tab>
+		      <md-tab label="Trendline Graph">
+		        <md-content class="md-padding">
+
+		        </md-content>
+		      </md-tab>
+	    </md-tabs>
 	  </div>
 	  <div flex="50" flex-order="4">
-	    <bar-chart data="fetchData()" columns="columns" options="barChartOptions"></bar-chart>
+	    
 	  </div>
 	</div>
 	<md-whiteframe class="md-whiteframe-z5" layout layout-align="center center" style="margin: 20px; position: relative; background-color: beige;">

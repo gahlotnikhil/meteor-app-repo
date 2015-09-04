@@ -46,9 +46,10 @@ angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state'
 	  });
 	}
 
-	$scope.fetchData().then(function(data) {
-		$scope.data = data;
-	});
+	$scope.data = {};
+	// $scope.fetchData().then(function(data) {
+	// 	$scope.data.data = data;
+	// });
   }
 
   function showSpeechProgress(show) {
@@ -64,9 +65,12 @@ angular.module('test-app').controller('DashboardCtrl', ['$scope', '$q', '$state'
     	TestDataService.getCompanyData().then(function(data) {
     		deferred.resolve(data.data);
     	});
-    	//deferred.resolve(data);
 
     	return deferred.promise;
+	}
+
+	$scope.getData = function() {
+		return $scope.data.data;
 	}
 
 	$scope.columns = [

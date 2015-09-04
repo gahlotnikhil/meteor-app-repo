@@ -53,14 +53,14 @@ angular.module('test-app').directive('lineChart', function() {
     }
 
     function fetchData () {
-    	var currentScope = $scope.$parent;
+    	var targetScope = $scope.$parent;
     	var deferred = $q.defer();
 
     	var dataFn = $parse($attrs.data);
   		var isFunction = $attrs.data.indexOf('(') != -1;
 
   		if(isFunction) {
-  			var object = dataFn(currentScope);
+  			var object = dataFn(targetScope);
 
   			// Function returning deferred promise
   			if (angular.isFunction(object.then)) {
@@ -73,7 +73,7 @@ angular.module('test-app').directive('lineChart', function() {
   				deferred.resolve(object);
   			}
   		} else { // Plain object
-  			var object = dataFn(currentScope);
+  			var object = dataFn(targetScope);
   			deferred.resolve(object);
   		}
 

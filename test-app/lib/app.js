@@ -26,7 +26,7 @@ if (Meteor.isClient) {
 
 	}
 
-	google.load("visualization", "1", {packages:['corechart','geochart', 'map','table']});
+	google.load("visualization", "1", {packages:['corechart','geochart', 'map','table', 'calendar']});
 
 	if (Meteor.isCordova)
 	  angular.element(document).on("deviceready", onReady);
@@ -34,6 +34,6 @@ if (Meteor.isClient) {
 	  angular.element(document).ready(onReady);
 } else {
 	angular.bootstrap(['test-app']);
-	
+
 	angular.module('test-app', ['angular-meteor']);
 }
